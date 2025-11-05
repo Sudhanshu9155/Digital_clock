@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital Clock</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="clock-box">
+      <h1>Digital Clock</h1>
+      <div class="clock">
+        <span id="time">00:00:00</span>
+      </div>
+      <div class="date" id="date"></div>
+    </div>
+  </div>
+
+  <script>
+    async function updateTime() {
+      try {
+        const res = await fetch('/time');
+        const data = await res.json();
+        document.getElementById('time').textContent = data.time;
+
+        const now = new Date();
+        document.getElementById('date').textContent = now.toLocaleDateString(
+          'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    updateTime();
+    setInterval(updateTime, 1000);
+  </script>
+</body>
+</html>
